@@ -331,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cd99454a28340abbfe597530e27347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Rooftop.RoofConnection
+  fishPrefab: {fileID: 7508539448840198190, guid: 22dcd85dc1af24e2ebf9f971f7100a20, type: 3}
 --- !u!114 &47869463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,7 +379,8 @@ MonoBehaviour:
     NetworkTransport: {fileID: 47869463}
     PlayerPrefab: {fileID: 392813516689339728, guid: d2e28cc50be37455195e778e6c6080e7, type: 3}
     Prefabs:
-      NetworkPrefabsLists: []
+      NetworkPrefabsLists:
+      - {fileID: 11400000, guid: 8fb193d74eaea4faa96bc931307be29a, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0

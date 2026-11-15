@@ -1,0 +1,4 @@
+«Рыба» — mariaagapova29, Sketchfab
+https://sketchfab.com/3d-models/be7cf368e6fb452ab99e115846622686
+CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Для Unity объединены части сетки, изменены масштаб и ориентация; используется исходная цветовая текстура.
