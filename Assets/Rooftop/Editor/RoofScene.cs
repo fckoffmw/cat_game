@@ -41,13 +41,7 @@ namespace Rooftop.Editor
                     Paint("Box" + sign, sign < 0 ? Color.cyan : Color.magenta));
             }
             Shape("Vent", new(0,.35f,0), new(1,.7f,10), metal);
-            var fish = Shape("Fish", Vector3.zero, new(.75f,.28f,.38f), Paint("Scales",new Color(1,.66f,.2f)), PrimitiveType.Sphere);
-            fish.GetComponent<Collider>().isTrigger = true;
-            fish.AddComponent<Rigidbody>().isKinematic = true;
-            fish.AddComponent<NetworkObject>();
-            fish.AddComponent<RoofFish>();
-            var prefab = PrefabUtility.SaveAsPrefabAsset(fish, Root + "Fish.prefab");
-            Object.DestroyImmediate(fish);
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(Root + "Fish.prefab");
             for (int section = 0; section < 6; section++)
             {
                 var group = new GameObject("Section " + (section+1));
@@ -70,12 +64,12 @@ namespace Rooftop.Editor
             Object.DestroyImmediate(cat.GetComponent<CapsuleCollider>());
             cat.AddComponent<CharacterController>().stepOffset = .2f;
             cat.AddComponent<NetworkObject>();
-            cat.AddComponent<Unity.Netcode.Components.NetworkTransform>();
             cat.AddComponent<CatInventory>();
             cat.AddComponent<PracticeCat>();
             manager.NetworkConfig.PlayerPrefab = PrefabUtility.SaveAsPrefabAsset(cat, Root + "PracticeCat.prefab");
             Object.DestroyImmediate(cat);
-            network.AddComponent<RoofConnection>();
+            manager.NetworkConfig.Prefabs.NetworkPrefabsLists.Add(AssetDatabase.LoadAssetAtPath<NetworkPrefabsList>("Assets/DefaultNetworkPrefabs.asset"));
+            network.AddComponent<RoofConnection>().fishPrefab = prefab;
             const string path = Root + "VentRoof.unity";
             EditorSceneManager.SaveScene(scene,path);
             EditorBuildSettings.scenes = new[]{new EditorBuildSettingsScene(path,true)};

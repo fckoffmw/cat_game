@@ -10,10 +10,28 @@ namespace Rooftop
         const ulong Available = ulong.MaxValue;
         const ulong Respawning = ulong.MaxValue - 1;
         readonly NetworkVariable<ulong> holder = new(Available);
-        double readyAt;
+        ulong authoritativeHolder = Available;
+        double readyAt, nextBroadcast;
+
+        void SetHolder(ulong value)
+        {
+            authoritativeHolder = value;
+            if (RoofConnection.FullUpdates) ShowState(Available, value);
+            else holder.Value = value;
+        }
+
+        [Rpc(SendTo.NotServer)]
+        void FullStateRpc(ulong value) => ShowState(Available, value);
+
 
         public override void OnNetworkSpawn()
         {
+            if (IsServer)
+            {
+                authoritativeHolder = Available;
+                holder.Value = Available;
+                nextBroadcast = 0;
+            }
             holder.OnValueChanged += ShowState;
             ShowState(Available, holder.Value);
         }
@@ -28,25 +46,30 @@ namespace Rooftop
 
         void OnTriggerStay(Collider other)
         {
-            if (!IsSpawned || !IsServer || holder.Value != Available) return;
+            if (!IsSpawned || !IsServer || authoritativeHolder != Available) return;
             var bag = other.GetComponentInParent<CatInventory>();
-            if (bag && bag.TryCarry(this)) holder.Value = bag.OwnerClientId;
+            if (bag && bag.TryCarry(this)) SetHolder(bag.OwnerClientId);
         }
 
         internal void ReturnAfterDelivery()
         {
-            holder.Value = Respawning;
+            SetHolder(Respawning);
             readyAt = NetworkManager.ServerTime.Time + 5;
         }
 
         void FixedUpdate()
         {
             if (!IsSpawned || !IsServer) return;
-            if (holder.Value == Respawning && NetworkManager.ServerTime.Time >= readyAt)
-                holder.Value = Available;
-            else if (holder.Value != Available && holder.Value != Respawning &&
-                     !NetworkManager.ConnectedClients.ContainsKey(holder.Value))
-                holder.Value = Available;
+            if (RoofConnection.FullUpdates && NetworkManager.ServerTime.Time >= nextBroadcast)
+            {
+                FullStateRpc(authoritativeHolder);
+                nextBroadcast = NetworkManager.ServerTime.Time + .1;
+            }
+            if (authoritativeHolder == Respawning && NetworkManager.ServerTime.Time >= readyAt)
+                SetHolder(Available);
+            else if (authoritativeHolder != Available && authoritativeHolder != Respawning &&
+                     !NetworkManager.ConnectedClients.ContainsKey(authoritativeHolder))
+                SetHolder(Available);
         }
     }
 }

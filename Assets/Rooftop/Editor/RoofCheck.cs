@@ -57,13 +57,15 @@ namespace Rooftop.Editor
                     stage++;
                 }
                 if (EditorApplication.timeSinceStartup - started > 25) throw new TimeoutException("Stage " + stage);
-                if (stage == 1 && manager.LocalClient.PlayerObject)
+                if (stage == 1 && manager.LocalClient.PlayerObject && EditorApplication.timeSinceStartup - started > 3)
                 {
                     var fishes = UnityEngine.Object.FindObjectsByType<RoofFish>(FindObjectsSortMode.None);
                     if (fishes.Length != 12 || fishes.Any(f => !f.IsSpawned)) throw new Exception("Fish spawn failed");
                     fish = fishes[0];
                     bag = manager.LocalClient.PlayerObject.GetComponent<CatInventory>();
                     var controller = bag.GetComponent<CharacterController>();
+                    if (!controller.isGrounded || Mathf.Abs(bag.transform.position.y - 1f) > .15f)
+                        throw new Exception("Spawn did not settle on roof: " + bag.transform.position);
                     controller.enabled = false;
                     bag.transform.position = fish.transform.position + Vector3.up * .7f;
                     controller.enabled = true;

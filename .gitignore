@@ -12,3 +12,6 @@
 *.csproj
 *.sln
 *.user
+__pycache__/
+/Assets/Resources/PerformanceTestRunInfo.json*
+/Assets/Resources/PerformanceTestRunSettings.json*
