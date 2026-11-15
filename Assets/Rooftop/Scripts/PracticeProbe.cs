@@ -35,13 +35,13 @@ namespace Rooftop
             cat.ProbeInput = true;
             if (host)
             {
-                Debug.Log("HOST_READY");
+                Debug.Log($"HOST_READY id={cat.OwnerClientId} x={cat.transform.position.x:F2}");
                 if (args.Contains("-fishTrial")) yield return FishTrial(manager);
                 yield break;
             }
             yield return new WaitForSecondsRealtime(1.5f);
             int count = FindObjectsByType<RoofFish>(FindObjectsSortMode.None).Length;
-            Debug.Log($"CLIENT_READY fish={count} players={FindObjectsByType<PracticeCat>(FindObjectsSortMode.None).Length}");
+            Debug.Log($"CLIENT_READY id={cat.OwnerClientId} x={cat.transform.position.x:F2} fish={count} players={FindObjectsByType<PracticeCat>(FindObjectsSortMode.None).Length}");
             if (args.Contains("-fishTrial"))
             {
                 int visible = FindObjectsByType<RoofFish>(FindObjectsSortMode.None).Count(f => f.GetComponent<Renderer>().enabled);

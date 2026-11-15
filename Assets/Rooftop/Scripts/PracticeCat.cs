@@ -20,6 +20,7 @@ namespace Rooftop
         readonly Queue<Move> incoming = new();
         readonly List<Move> pending = new();
         CharacterController controller;
+        int spawnSlot = -1;
         int sequence, received, acknowledged, lastSnapshot = -1, tick;
         float vertical, cooldown;
         bool grounded, jumpPressed, forceEarly, ready;
@@ -40,7 +41,17 @@ namespace Rooftop
             controller = GetComponent<CharacterController>();
             if (IsServer)
             {
-                Warp(new Vector3(OwnerClientId % 2 == 0 ? -9 : 9, 1.1f, OwnerClientId % 3 == 2 ? -3 : 3));
+                // Assign by occupied homes; client IDs change after a reconnect.
+                var occupied = new HashSet<int>();
+                foreach (var obj in NetworkManager.SpawnManager.SpawnedObjectsList)
+                {
+                    if (obj != NetworkObject && obj.IsPlayerObject &&
+                        obj.TryGetComponent<PracticeCat>(out var other))
+                        occupied.Add(other.spawnSlot);
+                }
+                spawnSlot = 0;
+                while (occupied.Contains(spawnSlot)) spawnSlot++;
+                Warp(new Vector3(spawnSlot % 2 == 0 ? -9 : 9, 1.1f, spawnSlot < 2 ? 3 : -3));
                 ready = true;
             }
             else if (!IsOwner) controller.enabled = false;
