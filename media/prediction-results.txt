@@ -1,0 +1,73 @@
+direct-client0
+CLIENT_READY fish=12 players=2
+PR4 player=1 INPUT #148  y=1.080
+PR4 player=1 LOCAL_JUMP #148  y=1.194
+PR4 player=1 ACK #148 after_ms=69 delta_y=0.000 replay=3 server_y=1.194 y=1.496
+PR4 player=1 INPUT #217  y=1.080
+PR4 player=1 LOCAL_JUMP #217  y=1.194
+PR4 player=1 ACK #217 after_ms=64 delta_y=-0.416 replay=3 server_y=1.080 y=1.080
+PR4 player=1 INPUT #393  y=1.080
+PR4 player=1 LOCAL_JUMP #393  y=1.194
+PR4 player=1 ACK #393 after_ms=67 delta_y=0.000 replay=3 server_y=1.194 y=1.582
+VENT_OK from=1.00 to=-4.90
+PROBE_END x=-4.90 y=1.08 fish=12 bag=False
+
+direct-host
+PR4 player=1 ACCEPT #148  y=1.194
+PR4 player=1 REJECT #217  y=1.080
+PR4 player=1 ACCEPT #393  y=1.194
+
+baseline-client0
+CLIENT_READY fish=12 players=2
+PR4 player=1 INPUT #150  y=1.080
+PR4 player=1 ACK #150 after_ms=283 delta_y=0.114 replay=13 server_y=1.194 y=1.194
+PR4 player=1 INPUT #219  y=1.080
+PR4 player=1 ACK #219 after_ms=282 delta_y=0.000 replay=13 server_y=1.080 y=1.080
+PR4 player=1 INPUT #394  y=1.080
+PR4 player=1 ACK #394 after_ms=275 delta_y=0.114 replay=13 server_y=1.194 y=1.194
+VENT_OK from=1.00 to=-5.00
+PROBE_END x=-5.00 y=1.08 fish=12 bag=False
+
+baseline-host
+PR4 player=1 ACCEPT #150  y=1.194
+PR4 player=1 REJECT #219  y=1.080
+PR4 player=1 ACCEPT #394  y=1.194
+
+prediction-client0
+CLIENT_READY fish=12 players=2
+PR4 player=1 INPUT #149  y=1.080
+PR4 player=1 LOCAL_JUMP #149  y=1.194
+PR4 player=1 ACK #149 after_ms=249 delta_y=0.000 replay=12 server_y=1.194 y=2.058
+PR4 player=1 INPUT #218  y=1.080
+PR4 player=1 LOCAL_JUMP #218  y=1.194
+PR4 player=1 ACK #218 after_ms=253 delta_y=-0.978 replay=12 server_y=1.080 y=1.080
+PR4 player=1 INPUT #394  y=1.080
+PR4 player=1 LOCAL_JUMP #394  y=1.194
+PR4 player=1 ACK #394 after_ms=249 delta_y=0.000 replay=12 server_y=1.194 y=2.143
+VENT_OK from=1.00 to=-4.90
+PROBE_END x=-4.90 y=1.08 fish=12 bag=False
+
+prediction-host
+PR4 player=1 ACCEPT #149  y=1.194
+PR4 player=1 REJECT #218  y=1.080
+PR4 player=1 ACCEPT #394  y=1.194
+
+loss-client0
+CLIENT_READY fish=12 players=2
+PR4 player=1 INPUT #150  y=1.080
+PR4 player=1 LOCAL_JUMP #150  y=1.194
+PR4 player=1 ACK #150 after_ms=812 delta_y=0.000 replay=40 server_y=1.194 y=1.080
+PR4 player=1 INPUT #218  y=1.080
+PR4 player=1 LOCAL_JUMP #218  y=1.194
+PR4 player=1 ACK #218 after_ms=813 delta_y=0.000 replay=40 server_y=1.080 y=1.080
+PR4 player=1 INPUT #394  y=1.080
+PR4 player=1 LOCAL_JUMP #394  y=1.194
+PR4 player=1 ACK #396 after_ms=864 delta_y=0.000 replay=41 server_y=1.461 y=1.080
+VENT_OK from=1.00 to=-5.00
+PROBE_END x=-5.00 y=1.08 fish=12 bag=False
+
+loss-host
+PR4 player=1 ACCEPT #150  y=1.194
+PR4 player=1 REJECT #218  y=1.080
+PR4 player=1 ACCEPT #394  y=1.194
+

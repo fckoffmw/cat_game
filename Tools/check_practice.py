@@ -45,7 +45,7 @@ async def scenario(options, name, port, delay=0, loss=0, full=False):
         await wait_for(host, "HOST_READY")
         for index in range(2 if fish else 1):
             endpoint = port + index + 1
-            relay = Relay(port, delay, loss, 42 + index)
+            relay = Relay(port, 0 if loss else delay, 0 if loss else loss, 42 + index)
             transport, _ = await asyncio.get_running_loop().create_datagram_endpoint(
                 lambda: relay, local_addr=("127.0.0.1", endpoint))
             relays.append((transport, relay))
@@ -54,6 +54,10 @@ async def scenario(options, name, port, delay=0, loss=0, full=False):
                 args.append("-baseline")
             client = await launch(f"client{index}", endpoint, args, graphics=not fish)
             await wait_for(client, "CLIENT_READY")
+            if loss:
+                # Measure gameplay after joining. Keep scene synchronization out of this experiment.
+                relay.delay = delay / 1000
+                relay.loss = loss / 100
             if fish and index == 0:
                 await wait_for(host, "FISH_HELD")
 
@@ -90,14 +94,16 @@ async def scenario(options, name, port, delay=0, loss=0, full=False):
 
 async def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("suite", choices=["prediction", "fish"])
+    parser.add_argument("suite", choices=["prediction", "fish", "loss"])
     parser.add_argument("player", type=Path, help="executable inside Rooftop.app/Contents/MacOS")
     parser.add_argument("output", type=Path)
     parser.add_argument("--base-port", type=int, default=23770)
     args = parser.parse_args()
     args.output = args.output.resolve()
     args.output.mkdir(parents=True, exist_ok=True)
-    if args.suite == "fish":
+    if args.suite == "loss":
+        await scenario(args, "loss", args.base_port + 30, 175, 4)
+    elif args.suite == "fish":
         for i, name in enumerate(("full", "events")):
             await scenario(args, name, args.base_port + 40 + 10*i, full=i == 0)
     else:
