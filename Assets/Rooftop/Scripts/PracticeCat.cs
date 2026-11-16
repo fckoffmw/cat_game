@@ -119,9 +119,24 @@ namespace Rooftop
                 bool accepted = Step(move);
                 if (jump) Report(accepted ? "ACCEPT" : "REJECT", acknowledged);
             }
-            // Include the exact state of every jump, even between regular snapshots.
-            if (jump || tick % 2 == 0)
-                StateRpc(tick, acknowledged, transform.position, transform.eulerAngles.y, vertical, cooldown, grounded);
+            // Keep owner acknowledgements at 25 Hz, including the exact state of every jump.
+            // Select recipients here on the server; receiver-side IsOwner cannot save bandwidth.
+            if (OwnerClientId != Unity.Netcode.NetworkManager.ServerClientId && (jump || tick % 2 == 0))
+                StateRpc(tick, acknowledged, transform.position, transform.eulerAngles.y, vertical, cooldown, grounded,
+                    RpcTarget.Owner);
+
+            // Remote observers receive 10 Hz. The host already has the authoritative state.
+            if (tick % 5 == 0)
+            {
+                var observers = NetworkObject.GetObservers();
+                while (observers.MoveNext())
+                {
+                    var clientId = observers.Current;
+                    if (clientId == OwnerClientId || clientId == Unity.Netcode.NetworkManager.ServerClientId) continue;
+                    StateRpc(tick, acknowledged, transform.position, transform.eulerAngles.y, vertical, cooldown, grounded,
+                        RpcTarget.Single(clientId, RpcTargetUse.Temp));
+                }
+            }
         }
 
         [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
@@ -150,8 +165,8 @@ namespace Rooftop
             return launch;
         }
 
-        [Rpc(SendTo.ClientsAndHost, Delivery = RpcDelivery.Unreliable)]
-        void StateRpc(int serverTick, int ack, Vector3 position, float yaw, float speed, float remaining, bool onGround)
+        [Rpc(SendTo.SpecifiedInParams, Delivery = RpcDelivery.Unreliable, InvokePermission = RpcInvokePermission.Server)]
+        void StateRpc(int serverTick, int ack, Vector3 position, float yaw, float speed, float remaining, bool onGround, RpcParams rpcParams = default)
         {
             if (IsServer || serverTick <= lastSnapshot) return;
             lastSnapshot = serverTick;
