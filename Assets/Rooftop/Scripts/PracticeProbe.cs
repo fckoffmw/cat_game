@@ -28,7 +28,7 @@ namespace Rooftop
             RoofConnection.FullUpdates = args.Contains("-fullFish");
             PracticeCat.Prediction = !args.Contains("-baseline");
             ushort port = ushort.Parse(args[Array.IndexOf(args,"-roofPort")+1]);
-            if (!session.StartSession(host,"127.0.0.1",port)) { Application.Quit(2); yield break; }
+            if (!session.StartSession(host,"127.0.0.1",port, enableMatch: false)) { Application.Quit(2); yield break; }
             var manager = NetworkManager.Singleton;
             yield return new WaitUntil(() => manager.IsConnectedClient && manager.LocalClient.PlayerObject);
             var cat = manager.LocalClient.PlayerObject.GetComponent<PracticeCat>();

@@ -11,9 +11,18 @@ namespace Rooftop
         internal bool TryCarry(RoofFish fish)
         {
             if (!IsSpawned || !IsServer || carrying.Value) return false;
+            var match = RoofMatch.Instance;
+            if (match && !match.CanCarry(OwnerClientId)) return false;
             carried = fish;
             carrying.Value = true;
             return true;
+        }
+
+        internal void ResetForRound()
+        {
+            if (!IsSpawned || !IsServer) return;
+            carried = null;
+            carrying.Value = false;
         }
 
         // Match calls on the server after validating round and box ownership.
@@ -21,8 +30,7 @@ namespace Rooftop
         {
             if (!IsSpawned || !IsServer || !carried) return false;
             carried.ReturnAfterDelivery();
-            carried = null;
-            carrying.Value = false;
+            ResetForRound();
             return true;
         }
     }

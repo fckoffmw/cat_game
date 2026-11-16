@@ -12,6 +12,7 @@ class Relay(asyncio.DatagramProtocol):
         self.loss = loss / 100
         self.random = random.Random(seed)
         self.out_bytes = 0
+        self.out_packets = 0
 
     def connection_made(self, transport):
         self.transport = transport
@@ -20,6 +21,7 @@ class Relay(asyncio.DatagramProtocol):
         if peer == self.server:
             destination = self.client
             self.out_bytes += len(data)
+            self.out_packets += 1
         else:
             self.client = peer
             destination = self.server
