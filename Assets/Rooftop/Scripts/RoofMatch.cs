@@ -22,8 +22,10 @@ namespace Rooftop
             public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
             {
                 serializer.SerializeValue(ref Phase);
-                serializer.SerializeValue(ref EndsAt);
-                serializer.SerializeValue(ref WinnerSlot);
+                if (Phase == RoofMatch.Phase.Playing) serializer.SerializeValue(ref EndsAt);
+                else EndsAt = 0;
+                if (Phase == RoofMatch.Phase.Finished) serializer.SerializeValue(ref WinnerSlot);
+                else WinnerSlot = -1;
             }
 
             public bool Equals(RoundState other) =>
@@ -49,7 +51,7 @@ namespace Rooftop
 
         internal static RoofMatch Instance { get; private set; }
 
-        readonly NetworkVariable<RoundState> round = new();
+        readonly NetworkVariable<RoundState> round = new(new RoundState { WinnerSlot = -1 });
         NetworkList<Standing> standings;
 
         internal RoundState Round => round.Value;
@@ -177,6 +179,7 @@ namespace Rooftop
             }
             var finished = Round;
             finished.Phase = Phase.Finished;
+            finished.EndsAt = 0;
             finished.WinnerSlot = winner;
             round.Value = finished;
         }

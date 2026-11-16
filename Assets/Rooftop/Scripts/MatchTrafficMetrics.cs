@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Rooftop
 {
@@ -22,7 +23,9 @@ namespace Rooftop
         MatchTrafficMetrics(EventInfo publisher)
         {
             this.publisher = publisher;
-            handler = Delegate.CreateDelegate(publisher.EventHandlerType, this, nameof(Observe));
+            var collectionType = publisher.EventHandlerType.GetGenericArguments()[0];
+            var observe = typeof(MatchTrafficMetrics).GetMethod(nameof(Observe), BindingFlags.Instance | BindingFlags.NonPublic);
+            handler = observe.MakeGenericMethod(collectionType).CreateDelegate(publisher.EventHandlerType, this);
             publisher.GetAddMethod(true).Invoke(null, new object[] { handler });
         }
 
@@ -38,9 +41,10 @@ namespace Rooftop
             return null;
         }
 
-        void Observe(object collection)
+        [Preserve]
+        void Observe<T>(T collection)
         {
-            metrics ??= collection.GetType().GetProperty("Metrics");
+            metrics ??= typeof(T).GetProperty("Metrics");
             foreach (var metric in (IEnumerable)metrics.GetValue(collection))
             {
                 var type = metric.GetType();
