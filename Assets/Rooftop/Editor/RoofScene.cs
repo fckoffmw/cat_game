@@ -37,9 +37,10 @@ namespace Rooftop.Editor
             {
                 Shape("Parapet X", new(sign*12,.5f,0), new(.3f,1,16), metal);
                 Shape("Parapet Z", new(0,.5f,sign*8), new(24,1,.3f), metal);
-                Shape("Box " + sign, new(sign*10,.25f,0), new(1.5f,.5f,1.5f),
-                    Paint("Box" + sign, sign < 0 ? Color.cyan : Color.magenta));
             }
+            var deliveryCrates = AssetDatabase.LoadAssetAtPath<GameObject>(
+                Root + "Art/DeliveryCrates/DeliveryCrates.prefab");
+            PrefabUtility.InstantiatePrefab(deliveryCrates, scene);
             Shape("Vent", new(0,.35f,0), new(1,.7f,10), metal);
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(Root + "Fish.prefab");
             for (int section = 0; section < 6; section++)
