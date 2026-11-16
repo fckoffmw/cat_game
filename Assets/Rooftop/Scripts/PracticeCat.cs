@@ -21,6 +21,7 @@ namespace Rooftop
         readonly List<Move> pending = new();
         CharacterController controller;
         int spawnSlot = -1;
+        internal int SpawnSlot => spawnSlot;
         int sequence, received, acknowledged, lastSnapshot = -1, tick;
         float vertical, cooldown;
         bool grounded, jumpPressed, forceEarly, ready;
@@ -51,10 +52,23 @@ namespace Rooftop
                 }
                 spawnSlot = 0;
                 while (occupied.Contains(spawnSlot)) spawnSlot++;
-                Warp(new Vector3(spawnSlot % 2 == 0 ? -9 : 9, 1.1f, spawnSlot < 2 ? 3 : -3));
+                Warp(SpawnPosition);
                 ready = true;
             }
             else if (!IsOwner) controller.enabled = false;
+        }
+
+        Vector3 SpawnPosition => new(spawnSlot % 2 == 0 ? -9 : 9, 1.1f, spawnSlot < 2 ? 3 : -3);
+
+        internal void ResetForRound()
+        {
+            if (!IsServer) return;
+            incoming.Clear();
+            acknowledged = IsOwner ? sequence : received;
+            vertical = cooldown = 0;
+            grounded = jumpPressed = forceEarly = false;
+            transform.rotation = Quaternion.identity;
+            Warp(SpawnPosition);
         }
 
         void Warp(Vector3 position)

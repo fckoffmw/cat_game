@@ -51,6 +51,12 @@ namespace Rooftop
             if (bag && bag.TryCarry(this)) SetHolder(bag.OwnerClientId);
         }
 
+        internal void ResetForRound()
+        {
+            SetHolder(Available);
+            readyAt = 0;
+        }
+
         internal void ReturnAfterDelivery()
         {
             SetHolder(Respawning);
