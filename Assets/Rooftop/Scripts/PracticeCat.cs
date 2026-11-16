@@ -24,6 +24,8 @@ namespace Rooftop
         int sequence, received, acknowledged, lastSnapshot = -1, tick;
         float vertical, cooldown;
         bool grounded, jumpPressed, forceEarly, ready;
+        public float GetCooldown() => cooldown;
+        public bool IsGrounded() => grounded;
         Vector3 remotePosition;
         float remoteYaw;
         float pressedAt = -1;
