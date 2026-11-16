@@ -1,0 +1,71 @@
+Unity 6000.3.10f1 (e35f0c77bd8e), NGO 2.7.0, Multiplayer Tools 2.2.12
+Match commit 4c812844f423fdaeffe9321fff435380297548cf
+Movement integration e2bb3b8a34ca571d1f10c95e75ca82d798d41696
+macOS ARM64, three local players, 60 fish, UDP relays, no added delay or loss
+
+match-baseline seconds=59.954 payload_bytes=2264404 datagrams=12240 kB/s=37.769
+MATCH_METRIC PracticeCat.StateRpc messages=9004 bytes=366158
+MATCH_METRIC RoofMatch.round messages=2 bytes=20
+MATCH_METRIC RoofMatch.standings messages=14 bytes=362
+MATCH_METRIC RoofMatch.FullMatchStateRpc messages=1188 bytes=21384
+MATCH_METRIC RoofFish.FullStateRpc messages=70440 bytes=1391148
+MATCH_METRIC CatInventory.carrying messages=26 bytes=52
+
+match-baseline host
+MATCH_HOST_READY
+PR4 player=1 ACCEPT #72  y=1.194
+PR4 player=2 ACCEPT #38  y=1.351
+MATCH_DELIVERY slot=0 score=1
+MATCH_DELIVERY slot=1 score=1
+MATCH_DELIVERY slot=2 score=1
+MATCH_DELIVERY slot=0 score=2
+MATCH_DELIVERY slot=1 score=2
+MATCH_DELIVERY slot=0 score=3
+MATCH_HOST_WINNER
+
+match-baseline client0
+MATCH_CLIENT_READY
+MATCH_CLIENT_WINNER
+
+match-baseline client1
+MATCH_CLIENT_READY
+MATCH_CLIENT_WINNER
+
+match-events seconds=59.951 payload_bytes=544975 datagrams=10146 kB/s=9.090
+MATCH_METRIC PracticeCat.StateRpc messages=5400 bytes=220194
+MATCH_METRIC RoofMatch.round messages=2 bytes=20
+MATCH_METRIC RoofMatch.standings messages=14 bytes=362
+MATCH_METRIC CatInventory.carrying messages=26 bytes=52
+MATCH_METRIC RoofFish.holder messages=38 bytes=268
+
+match-events host
+MATCH_HOST_READY
+PR4 player=1 ACCEPT #77  y=1.194
+PR4 player=2 ACCEPT #39  y=1.351
+MATCH_DELIVERY slot=0 score=1
+MATCH_DELIVERY slot=1 score=1
+MATCH_DELIVERY slot=2 score=1
+MATCH_DELIVERY slot=0 score=2
+MATCH_DELIVERY slot=1 score=2
+MATCH_DELIVERY slot=0 score=3
+MATCH_HOST_WINNER
+MATCH_HOST_REMATCH
+MATCH_HOST_DRAW
+
+match-events client0
+MATCH_CLIENT_READY
+MATCH_CLIENT_WINNER
+MATCH_CLIENT_REMATCH
+MATCH_CLIENT_DRAW
+
+match-events client1
+MATCH_CLIENT_READY
+MATCH_CLIENT_WINNER
+MATCH_CLIENT_REMATCH
+MATCH_CLIENT_DRAW
+
+Existing fish suite on Unity 6000.3.10f1
+full seconds=60.001 payload_bytes=2190871 kB/s=36.514
+events seconds=60.001 payload_bytes=766317 kB/s=12.772
+full PASS
+events PASS
