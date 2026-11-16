@@ -2,3 +2,20 @@
 https://sketchfab.com/3d-models/be7cf368e6fb452ab99e115846622686
 CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
 Для Unity объединены части сетки, изменены масштаб и ориентация; используется исходная цветовая текстура.
+
+«Wooden Boxes» — MaX3Dd, Sketchfab
+https://sketchfab.com/3d-models/wooden-boxes-ddecbe4586594bddb4822a90c0cba222
+CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Использован один ящик из FBX. Изменены размер, ориентация, материал и разрешение текстур.
+
+«Package / Box / Коробка (Low poly)» — marishka1611, Sketchfab
+https://sketchfab.com/3d-models/package-box-low-poly-2960657b72b544d39684a092dc8b53c3
+CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Упрощена сетка, подобраны масштаб, ориентация и материалы.
+
+«Box of fish» — Chenchanchong, Sketchfab
+https://sketchfab.com/3d-models/box-of-fish-9d372e65ab4b4929a5ad6436c0ad1514
+Оригинальный «Box Of Fish» — Gnossiennes, указан в скачанном GLB
+https://sketchfab.com/3d-models/box-of-fish-555595d9dd1f45a0a404dc9897cd7767
+CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+Модель преобразована из GLB в OBJ. Изменены размер, ориентация, материал и разрешение текстур.

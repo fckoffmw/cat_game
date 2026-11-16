@@ -42,5 +42,5 @@
 - [Git: как вносить изменения](docs/Git_Workflow.md) — пошаговая инструкция для команды.
 - ПР‑4: [реализация предсказания](docs/Prediction_Implementation.md) и [матрица тестов](docs/Prediction_Test_Matrix.md).
 - ПР‑5: [исходный замер трафика](docs/Replication_Baseline.md) и [результат оптимизации](docs/Replication_Optimization.md).
-- [Автор модели рыбки](Assets/Rooftop/Art/Credits.txt)
+- [Авторы моделей рыбки и коробок](Assets/Rooftop/Art/Credits.txt)
 - Кадры и журналы проверок лежат в папке [docs/media](docs/media).
