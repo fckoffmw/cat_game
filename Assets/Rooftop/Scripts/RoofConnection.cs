@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Rooftop.Crypto;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -55,6 +57,14 @@ namespace Rooftop
             manager.NetworkConfig.ConnectionApproval = true;
             manager.ConnectionApprovalCallback = host ? Approve : null;
             manager.GetComponent<UnityTransport>().SetConnectionData(ip, udpPort, "0.0.0.0");
+            bool plaintext = Array.IndexOf(Environment.GetCommandLineArgs(), "-roofPlaintext") >= 0;
+            if (!plaintext)
+            {
+                var encrypted = GetComponent<EncryptedTransport>();
+                if (!encrypted) encrypted = gameObject.AddComponent<EncryptedTransport>();
+                manager.NetworkConfig.NetworkTransport = encrypted;
+            }
+            else manager.NetworkConfig.NetworkTransport = GetComponent<UnityTransport>();
             if (!host) return manager.StartClient();
             if (!manager.StartHost()) return false;
             if (largeRoof)
