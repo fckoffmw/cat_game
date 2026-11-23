@@ -1,0 +1,16 @@
+Unity 6000.3.10f1; macOS; actual dumpcap lo0 capture
+plaintext-loopback.pcapng: 2686 packets; ports 27300/27301
+encrypted-loopback.pcapng: 2710 packets; ports 27310/27311
+plaintext PASS encrypted_messages=0 tampered=0
+plaintext-host:
+plaintext-client:
+VENT_OK from=1.00 to=-5.00
+PROBE_END x=-5.00 y=1.08 fish=12 bag=False
+encrypted PASS encrypted_messages=846 tampered=1
+encrypted-host:
+PR6 SECURE_CONNECTED peer=4294967296
+PR6 AUTH_FAIL peer=4294967296
+encrypted-client:
+PR6 SECURE_CONNECTED peer=4294967296
+VENT_OK from=1.00 to=-5.00
+PROBE_END x=-5.00 y=1.08 fish=12 bag=False
