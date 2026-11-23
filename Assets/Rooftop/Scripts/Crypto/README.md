@@ -1,6 +1,6 @@
 # ПР-6: X25519 → HKDF-SHA256 → AES-256-GCM
 
-Изолированный модуль, без подключения к NGO. Ручная установка не нужна.
+CryptoManager содержит криптографические примитивы Арины. EncryptedTransport подключает их к NGO через Unity Transport. Ручная установка библиотеки не нужна.
 
 Библиотека: [BouncyCastle.Cryptography 2.7.0](https://www.nuget.org/packages/BouncyCastle.Cryptography/2.7.0),
 официальный NuGet, сборка `lib/netstandard2.0/BouncyCastle.Cryptography.dll`.
@@ -56,3 +56,14 @@ Nonce генерируется заново при каждом шифрован
 Известные ответы: [X25519 RFC 7748 §6.1](https://www.rfc-editor.org/rfc/rfc7748#section-6.1),
 [HKDF RFC 5869 A.1](https://www.rfc-editor.org/rfc/rfc5869#appendix-A.1), AES-256-GCM.
 Проверено на Windows/Mono из Unity 6000.3.10f1. IL2CPP, macOS и другие платформы не проверены.
+
+## Подключение игровых сообщений
+
+В ветке интеграции `feature/vanya-encrypted-transport` обычный запуск через RoofConnection
+использует EncryptedTransport. Обмен ключами и подтверждение выполняются до подключения NGO.
+Для каждого направления выводится отдельный ключ; транспортная перегрузка EncryptAES
+строит nonce из счётчика. Окно принятых номеров отвергает повторы после проверки GCM-тега.
+
+Подробности протокола, ограничения MITM, запуск отрицательного теста и формат PCAP
+приведены в [Security.md](../../../../docs/Security.md). Меню самотеста также проверяет
+окно повторов, счётчик nonce и подмену AAD.

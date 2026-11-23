@@ -110,6 +110,21 @@ namespace Rooftop.Crypto
             if (plaintext == null) throw new ArgumentNullException(nameof(plaintext));
             var nonce = new byte[NonceSize];
             Random.NextBytes(nonce);
+            return EncryptWithNonce(aesKey, plaintext, associatedData, nonce);
+        }
+
+        // Transport uses a fresh directional session key and a monotonic counter.
+        public static byte[] EncryptAES(byte[] aesKey, byte[] plaintext, ulong counter, byte[] associatedData)
+        {
+            RequireLength(aesKey, KeySize, nameof(aesKey));
+            if (plaintext == null) throw new ArgumentNullException(nameof(plaintext));
+            var nonce = new byte[NonceSize];
+            for (int i = 0; i < 8; i++) nonce[4 + i] = (byte)(counter >> (8 * i));
+            return EncryptWithNonce(aesKey, plaintext, associatedData, nonce);
+        }
+
+        static byte[] EncryptWithNonce(byte[] aesKey, byte[] plaintext, byte[] associatedData, byte[] nonce)
+        {
             var cipher = CreateGcm(true, aesKey, nonce, associatedData);
             var packet = new byte[checked(NonceSize + cipher.GetOutputSize(plaintext.Length))];
             Buffer.BlockCopy(nonce, 0, packet, 0, NonceSize);
